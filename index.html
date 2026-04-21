@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dishanii Manna — Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+    <style>
+        :root {
+          --bg: #0a0a0f;
+          --surface: #111118;
+          --surface2: #181825;
+          --border: #2a2a3a;
+          --accent: #7c6aff;
+          --accent2: #ff6a9e;
+          --accent3: #6affda;
+          --text: #e8e8f0;
+          --muted: #888899;
+          --tag-bg: #1e1e2e;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+          background: var(--bg);
+          color: var(--text);
+          font-family: 'DM Sans', sans-serif;
+          font-weight: 300;
+          line-height: 1.7;
+          overflow-x: hidden;
+        }
+
+        /* ── Grain overlay ── */
+        body::before {
+          content: '';
+          position: fixed; inset: 0;
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+          pointer-events: none; z-index: 999; opacity: 0.35;
+        }
+
+        /* ── Ambient glow blobs ── */
+        .glow-bg {
+          position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        .glow-bg span {
+          position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.12;
+        }
+        .glow-bg span:nth-child(1) { width: 600px; height: 600px; background: var(--accent); top: -200px; left: -200px; animation: drift 18s ease-in-out infinite alternate; }
+        .glow-bg span:nth-child(2) { width: 500px; height: 500px; background: var(--accent2); bottom: -150px; right: -150px; animation: drift 22s ease-in-out infinite alternate-reverse; }
+        .glow-bg span:nth-child(3) { width: 400px; height: 400px; background: var(--accent3); top: 40%; left: 40%; animation: drift 15s ease-in-out infinite alternate; }
+
+        @keyframes drift {
+          from { transform: translate(0,0) scale(1); }
+          to   { transform: translate(60px, 40px) scale(1.1); }
+        }
+
+        /* ── Layout ── */
+        .wrapper { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 0 2rem; }
+
+        /* ── Nav ── */
+        nav {
+          position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+          border-bottom: 1px solid var(--border);
+          backdrop-filter: blur(20px);
+          background: rgba(10,10,15,0.7);
+        }
+        .nav-inner {
+          max-width: 900px; margin: 0 auto; padding: 1rem 2rem;
+          display: flex; justify-content: space-between; align-items: center;
+        }
+        .nav-logo {
+          font-family: 'DM Serif Display', serif;
+          font-size: 1.15rem; color: var(--text); text-decoration: none;
+          letter-spacing: -0.02em;
+        }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a {
+          color: var(--muted); text-decoration: none; font-size: 0.85rem;
+          font-family: 'DM Mono', monospace; font-weight: 400;
+          letter-spacing: 0.05em; text-transform: uppercase;
+          transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--text); }
+
+        /* ── Hero ── */
+        #hero {
+          min-height: 100vh;
+          display: flex; align-items: center;
+          padding-top: 5rem;
+        }
+        .hero-tag {
+          font-family: 'DM Mono', monospace; font-size: 0.78rem;
+          color: var(--accent3); letter-spacing: 0.12em; text-transform: uppercase;
+          margin-bottom: 1.2rem;
+          display: flex; align-items: center; gap: 0.6rem;
+        }
+        .hero-tag::before { content: ''; width: 28px; height: 1px; background: var(--accent3); }
+        h1 {
+          font-family: 'DM Serif Display', serif;
+          font-size: clamp(3rem, 8vw, 6rem);
+          line-height: 1.05;
+          letter-spacing: -0.03em;
+          margin-bottom: 1.5rem;
+        }
+        h1 em { font-style: italic; color: var(--accent); }
+        .hero-sub {
+          font-size: 1.1rem; color: var(--muted); max-width: 500px;
+          margin-bottom: 2.5rem; line-height: 1.8;
+        }
+        .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .btn {
+          display: inline-flex; align-items: center; gap: 0.5rem;
+          padding: 0.75rem 1.75rem; border-radius: 4px;
+          font-family: 'DM Mono', monospace; font-size: 0.82rem;
+          letter-spacing: 0.06em; text-transform: uppercase;
+          text-decoration: none; transition: all 0.25s; cursor: pointer;
+        }
+        .btn-primary {
+          background: var(--accent); color: #fff; border: none;
+        }
+        .btn-primary:hover { background: #9280ff; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(124,106,255,0.35); }
+        .btn-outline {
+          background: transparent; color: var(--text);
+          border: 1px solid var(--border);
+        }
+        .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+        .hero-stats {
+          display: flex; gap: 3rem; margin-top: 4rem;
+          padding-top: 3rem; border-top: 1px solid var(--border);
+        }
+        .stat-num {
+          font-family: 'DM Serif Display', serif;
+          font-size: 2.2rem; color: var(--text); line-height: 1;
+        }
+        .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 0.3rem; letter-spacing: 0.04em; }
+
+        /* ── Sections ── */
+        section { padding: 6rem 0; }
+        .section-label {
+          font-family: 'DM Mono', monospace; font-size: 0.75rem;
+          color: var(--accent2); letter-spacing: 0.14em; text-transform: uppercase;
+          margin-bottom: 0.75rem;
+          display: flex; align-items: center; gap: 0.6rem;
+        }
+        .section-label::before { content: ''; width: 20px; height: 1px; background: var(--accent2); }
+        h2 {
+          font-family: 'DM Serif Display', serif;
+          font-size: clamp(2rem, 4vw, 3rem);
+          letter-spacing: -0.02em; margin-bottom: 3rem;
+        }
+
+        /* ── About ── */
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+        .about-text p { color: var(--muted); margin-bottom: 1rem; font-size: 0.97rem; }
+        .about-text p strong { color: var(--text); font-weight: 500; }
+        .contact-links { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.5rem; }
+        .contact-link {
+          display: flex; align-items: center; gap: 0.75rem;
+          font-family: 'DM Mono', monospace; font-size: 0.8rem;
+          color: var(--muted); text-decoration: none; transition: color 0.2s;
+          padding: 0.6rem 1rem; border: 1px solid var(--border); border-radius: 4px;
+        }
+        .contact-link:hover { color: var(--accent3); border-color: var(--accent3); }
+        .contact-link svg { flex-shrink: 0; }
+
+        .skills-card {
+          background: var(--surface); border: 1px solid var(--border);
+          border-radius: 8px; padding: 2rem;
+        }
+        .skills-card h3 {
+          font-family: 'DM Mono', monospace; font-size: 0.78rem;
+          color: var(--accent3); letter-spacing: 0.1em; text-transform: uppercase;
+          margin-bottom: 1.2rem;
+        }
+        .tag-group { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
+        .tag {
+          background: var(--tag-bg); border: 1px solid var(--border);
+          padding: 0.3rem 0.75rem; border-radius: 3px;
+          font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--muted);
+          transition: all 0.2s;
+        }
+        .tag:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* ── Experience ── */
+        .exp-card {
+          display: grid; grid-template-columns: 140px 1fr;
+          gap: 2rem; padding: 2rem 0;
+          border-bottom: 1px solid var(--border);
+        }
+        .exp-card:last-child { border-bottom: none; }
+        .exp-date {
+          font-family: 'DM Mono', monospace; font-size: 0.75rem;
+          color: var(--muted); letter-spacing: 0.04em; padding-top: 0.3rem;
+        }
+        .exp-role {
+          font-size: 1.1rem; font-weight: 500; margin-bottom: 0.2rem;
+        }
+        .exp-company {
+          font-family: 'DM Mono', monospace; font-size: 0.8rem;
+          color: var(--accent); margin-bottom: 1rem;
+        }
+        .exp-bullets { list-style: none; }
+        .exp-bullets li {
+          font-size: 0.9rem; color: var(--muted); padding: 0.25rem 0;
+          padding-left: 1.2rem; position: relative;
+        }
+        .exp-bullets li::before { content: '→'; position: absolute; left: 0; color: var(--accent3); }
+
+        /* ── Projects ── */
+        .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .project-card {
+          background: var(--surface); border: 1px solid var(--border);
+          border-radius: 8px; padding: 2rem;
+          transition: all 0.3s; position: relative; overflow: hidden;
+        }
+        .project-card::before {
+          content: ''; position: absolute; inset: 0;
+          background: linear-gradient(135deg, rgba(124,106,255,0.05) 0%, transparent 60%);
+          opacity: 0; transition: opacity 0.3s;
+        }
+        .project-card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.4); }
+        .project-card:hover::before { opacity: 1; }
+        .project-card:nth-child(2) { border-top: 2px solid var(--accent2); }
+        .project-card:nth-child(3) { border-top: 2px solid var(--accent3); }
+        .project-card:nth-child(4) { border-top: 2px solid var(--accent); }
+        .project-card:nth-child(1) { border-top: 2px solid #ffaa6a; }
+        .project-num {
+          font-family: 'DM Mono', monospace; font-size: 0.7rem;
+          color: var(--border); margin-bottom: 1rem; letter-spacing: 0.08em;
+        }
+        .project-title {
+          font-family: 'DM Serif Display', serif;
+          font-size: 1.3rem; margin-bottom: 0.75rem; letter-spacing: -0.01em;
+        }
+        .project-desc { font-size: 0.88rem; color: var(--muted); margin-bottom: 1.25rem; line-height: 1.65; }
+        .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+        .project-tag {
+          font-family: 'DM Mono', monospace; font-size: 0.7rem;
+          padding: 0.2rem 0.6rem; border-radius: 2px;
+          background: var(--tag-bg); color: var(--muted); border: 1px solid var(--border);
+        }
+
+        /* ── Education ── */
+        .edu-card {
+          background: var(--surface); border: 1px solid var(--border);
+          border-radius: 8px; padding: 2.5rem;
+          display: flex; justify-content: space-between; align-items: start;
+          gap: 2rem; flex-wrap: wrap;
+        }
+        .edu-degree {
+          font-family: 'DM Serif Display', serif;
+          font-size: 1.5rem; margin-bottom: 0.4rem;
+        }
+        .edu-inst {
+          font-size: 0.9rem; color: var(--muted); margin-bottom: 0.6rem;
+        }
+        .edu-year {
+          font-family: 'DM Mono', monospace; font-size: 0.78rem;
+          color: var(--muted);
+        }
+        .edu-cgpa {
+          font-family: 'DM Serif Display', serif;
+          font-size: 3rem; color: var(--accent3); line-height: 1;
+          text-align: right;
+        }
+        .edu-cgpa span { display: block; font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--muted); text-align: right; margin-top: 0.25rem; letter-spacing: 0.1em; }
+
+        /* ── Courses ── */
+        .courses-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1rem; }
+        .course-group h4 {
+          font-family: 'DM Mono', monospace; font-size: 0.75rem;
+          color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase;
+          margin-bottom: 0.8rem;
+        }
+        .course-list { list-style: none; }
+        .course-list li {
+          font-size: 0.85rem; color: var(--muted); padding: 0.3rem 0;
+          border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.5rem;
+        }
+        .course-list li::before { content: '▸'; color: var(--accent2); font-size: 0.7rem; flex-shrink: 0; }
+
+        /* ── Footer ── */
+        footer {
+          border-top: 1px solid var(--border); padding: 3rem 0;
+          text-align: center;
+        }
+        .footer-name {
+          font-family: 'DM Serif Display', serif;
+          font-size: 2rem; margin-bottom: 0.5rem;
+        }
+        .footer-sub { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--muted); letter-spacing: 0.06em; }
+        .footer-links { display: flex; justify-content: center; gap: 2rem; margin-top: 1.5rem; }
+        .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--accent); }
+
+        /* ── Scroll fade-in ── */
+        .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .fade-in.visible { opacity: 1; transform: none; }
+
+        /* ── Responsive ── */
+        @media (max-width: 700px) {
+          .about-grid, .projects-grid, .courses-grid { grid-template-columns: 1fr; }
+          .exp-card { grid-template-columns: 1fr; gap: 0.5rem; }
+          .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
+          .nav-links { gap: 1rem; }
+          h1 { font-size: 2.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="glow-bg">
+    <span></span><span></span><span></span>
+</div>
+
+<!-- Nav -->
+<nav>
+    <div class="nav-inner">
+        <a href="#hero" class="nav-logo">Dishanii Manna</a>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#experience">Work</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#education">Education</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Hero -->
+<section id="hero">
+    <div class="wrapper">
+        <div class="hero-tag">Available for opportunities</div>
+        <h1>Building<br/><em>intelligent</em><br/>systems.</h1>
+        <p class="hero-sub">
+            CS undergrad at KIIT with a focus on AI, machine learning, and full-stack engineering.
+            I turn complex problems into clean, working solutions.
+        </p>
+        <div class="hero-cta">
+            <a href="https://github.com/dishanii-manna" target="_blank" class="btn btn-primary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.08-.74.08-.72.08-.72 1.2.08 1.83 1.23 1.83 1.23 1.06 1.82 2.8 1.3 3.48.99.1-.77.41-1.3.75-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.17 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02.005 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.66 1.65.25 2.87.12 3.17.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                GitHub
+            </a>
+            <a href="https://linkedin.com/in/dishanii-manna-761413341" target="_blank" class="btn btn-outline">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.37V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.02H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46C23.2 24 24 23.23 24 22.28V1.72C24 .77 23.2 0 22.23 0z"/></svg>
+                LinkedIn
+            </a>
+            <a href="mailto:mannadishanii27@gmail.com" class="btn btn-outline">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                Email
+            </a>
+        </div>
+        <div class="hero-stats">
+            <div>
+                <div class="stat-num">9.23</div>
+                <div class="stat-label">CGPA</div>
+            </div>
+            <div>
+                <div class="stat-num">3+</div>
+                <div class="stat-label">Projects shipped</div>
+            </div>
+            <div>
+                <div class="stat-num">2026</div>
+                <div class="stat-label">Graduating batch</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About -->
+<section id="about">
+    <div class="wrapper">
+        <div class="section-label">About me</div>
+        <h2>Engineer &amp; problem-solver</h2>
+        <div class="about-grid fade-in">
+            <div class="about-text">
+                <p>I'm a <strong>Computer Science undergrad at KIIT, Bhubaneswar</strong>, with a CGPA of 9.23. My work spans machine learning, NLP, data engineering, and backend systems.</p>
+                <p>From building <strong>RAG pipelines for document Q&amp;A</strong> to predicting employee attrition with ensemble methods, I enjoy tackling end-to-end problems — from data ingestion to deployment.</p>
+                <p>I'm comfortable working across the stack: Python + FastAPI backends, SQL-based data warehouses, and containerised deployments with Docker. Currently expanding into distributed systems and cloud computing.</p>
+                <div class="contact-links">
+                    <a href="tel:+917478159516" class="contact-link">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.6 3.42 2 2 0 0 1 3.58 1.25h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.96a16 16 0 0 0 6.13 6.13l.91-.91a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        +91 7478159516
+                    </a>
+                    <a href="mailto:mannadishanii27@gmail.com" class="contact-link">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        mannadishanii27@gmail.com
+                    </a>
+                </div>
+            </div>
+            <div class="skills-card">
+                <h3>Languages</h3>
+                <div class="tag-group">
+                    <span class="tag">Python</span><span class="tag">Java</span><span class="tag">C/C++</span><span class="tag">SQL</span><span class="tag">Bash</span>
+                </div>
+                <h3>ML / AI</h3>
+                <div class="tag-group">
+                    <span class="tag">Scikit-learn</span><span class="tag">NLTK</span><span class="tag">NLP</span><span class="tag">RAG</span><span class="tag">Ollama</span><span class="tag">ChromaDB</span>
+                </div>
+                <h3>Backend &amp; Data</h3>
+                <div class="tag-group">
+                    <span class="tag">FastAPI</span><span class="tag">Spring Boot</span><span class="tag">MySQL</span><span class="tag">Docker</span><span class="tag">PyMuPDF</span>
+                </div>
+                <h3>Tools</h3>
+                <div class="tag-group">
+                    <span class="tag">Git</span><span class="tag">Postman</span><span class="tag">VS Code</span><span class="tag">IntelliJ</span><span class="tag">Linux</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Experience -->
+<section id="experience">
+    <div class="wrapper">
+        <div class="section-label">Experience</div>
+        <h2>Where I've worked</h2>
+        <div class="fade-in">
+            <div class="exp-card">
+                <div class="exp-date">Nov – Dec<br/>2024</div>
+                <div>
+                    <div class="exp-role">AI Intern</div>
+                    <div class="exp-company">TechSaksham — Edunet Foundation · Remote</div>
+                    <ul class="exp-bullets">
+                        <li>Developed a Spam Email Classifier using Python with NLP techniques (NLTK) to detect spam in real time.</li>
+                        <li>Preprocessed email text via tokenization, stopword removal, and punctuation cleaning.</li>
+                        <li>Converted messages to feature vectors with CountVectorizer; trained a Multinomial Naive Bayes classifier.</li>
+                        <li>Evaluated the model on custom inputs, achieving accurate real-time spam predictions.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Projects -->
+<section id="projects">
+    <div class="wrapper">
+        <div class="section-label">Projects</div>
+        <h2>Things I've built</h2>
+        <div class="projects-grid fade-in">
+            <div class="project-card">
+                <div class="project-num">01 · Jan–Feb 2026</div>
+                <div class="project-title">RAG-Based PDF Q&amp;A System</div>
+                <p class="project-desc">End-to-end retrieval-augmented generation pipeline — PDF ingestion to natural language answers. Fully local and offline via Docker Compose.</p>
+                <div class="project-tags">
+                    <span class="project-tag">Python</span><span class="project-tag">FastAPI</span><span class="project-tag">Ollama</span><span class="project-tag">ChromaDB</span><span class="project-tag">Docker</span><span class="project-tag">RAG</span>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-num">02 · Jan–Feb 2026</div>
+                <div class="project-title">Employee Attrition Prediction</div>
+                <p class="project-desc">ML system on IBM HR Analytics dataset. Compared five algorithms; selected Random Forest for best precision–recall trade-off on imbalanced data.</p>
+                <div class="project-tags">
+                    <span class="project-tag">Python</span><span class="project-tag">Scikit-learn</span><span class="project-tag">Random Forest</span><span class="project-tag">ML</span>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-num">03 · Jun–Jul 2025</div>
+                <div class="project-title">Retail Sales Analysis System</div>
+                <p class="project-desc">Mini data warehouse in MySQL with OLAP-style analytics — monthly aggregation, top products, customer spend, and market basket analysis via SQL joins.</p>
+                <div class="project-tags">
+                    <span class="project-tag">MySQL</span><span class="project-tag">SQL</span><span class="project-tag">OLAP</span><span class="project-tag">Data Warehousing</span>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-num">04 · 2024</div>
+                <div class="project-title">Spam Email Classifier</div>
+                <p class="project-desc">NLP pipeline using NLTK and Multinomial Naive Bayes. Preprocessed raw email text into feature vectors for real-time spam detection.</p>
+                <div class="project-tags">
+                    <span class="project-tag">Python</span><span class="project-tag">NLTK</span><span class="project-tag">NLP</span><span class="project-tag">Naive Bayes</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Education -->
+<section id="education">
+    <div class="wrapper">
+        <div class="section-label">Education</div>
+        <h2>Academic background</h2>
+        <div class="fade-in">
+            <div class="edu-card" style="margin-bottom: 3rem;">
+                <div>
+                    <div class="edu-degree">B.Tech in Computer Science &amp; Engineering</div>
+                    <div class="edu-inst">Kalinga Institute of Industrial Technology (KIIT), Bhubaneswar</div>
+                    <div class="edu-year">2023 – Present</div>
+                </div>
+                <div>
+                    <div class="edu-cgpa">9.23<span>CGPA</span></div>
+                </div>
+            </div>
+
+            <div class="section-label" style="margin-bottom: 1.5rem;">Coursework</div>
+            <div class="courses-grid">
+                <div class="course-group">
+                    <h4>Theory</h4>
+                    <ul class="course-list">
+                        <li>Machine Learning</li>
+                        <li>Artificial Intelligence</li>
+                        <li>Data Mining &amp; Warehousing</li>
+                        <li>Cloud Computing</li>
+                        <li>Software Engineering</li>
+                        <li>Distributed Operating Systems</li>
+                        <li>Automata Theory &amp; Formal Languages</li>
+                        <li>Computer Organization &amp; Architecture</li>
+                        <li>Industry 4.0 Technologies</li>
+                    </ul>
+                </div>
+                <div class="course-group">
+                    <h4>Theory + Labs</h4>
+                    <ul class="course-list">
+                        <li>Data Structures</li>
+                        <li>OOP in Java</li>
+                        <li>Operating Systems</li>
+                        <li>Database Management Systems</li>
+                        <li>Design &amp; Analysis of Algorithms</li>
+                        <li>Computer Networks</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="wrapper">
+        <div class="footer-name">Dishanii Manna</div>
+        <div class="footer-sub">B.Tech CSE · KIIT, Bhubaneswar · 2023–Present</div>
+        <div class="footer-links">
+            <a href="https://github.com/dishanii-manna" target="_blank">GitHub</a>
+            <a href="https://linkedin.com/in/dishanii-manna-761413341" target="_blank">LinkedIn</a>
+            <a href="mailto:mannadishanii27@gmail.com">Email</a>
+            <a href="tel:+917478159516">+91 7478159516</a>
+        </div>
+        <p style="margin-top: 2rem; font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--border);">
+            Built with HTML · CSS · Hosted on GitHub Pages
+        </p>
+    </div>
+</footer>
+
+<script>
+    // Fade-in on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
