@@ -4,12 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Dishanii Manna — Portfolio</title>
+
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+
     <style>
         :root {
           --bg: #0a0a0f;
           --surface: #111118;
-          --surface2: #181825;
           --border: #2a2a3a;
           --accent: #7c6aff;
           --accent2: #ff6a9e;
@@ -19,163 +20,155 @@
           --tag-bg: #1e1e2e;
         }
 
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
           background: var(--bg);
           color: var(--text);
           font-family: 'DM Sans', sans-serif;
-          font-weight: 300;
-          line-height: 1.7;
-          overflow-x: hidden;
         }
 
-        body::before {
-          content: '';
-          position: fixed; inset: 0;
-          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-          pointer-events: none; z-index: 999; opacity: 0.35;
-        }
-
-        .glow-bg { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-        .glow-bg span { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.12; }
-
-        .glow-bg span:nth-child(1) { width: 600px; height: 600px; background: var(--accent); top: -200px; left: -200px; animation: drift 18s ease-in-out infinite alternate; }
-        .glow-bg span:nth-child(2) { width: 500px; height: 500px; background: var(--accent2); bottom: -150px; right: -150px; animation: drift 22s ease-in-out infinite alternate-reverse; }
-        .glow-bg span:nth-child(3) { width: 400px; height: 400px; background: var(--accent3); top: 40%; left: 40%; animation: drift 15s ease-in-out infinite alternate; }
-
-        @keyframes drift {
-          from { transform: translate(0,0) scale(1); }
-          to   { transform: translate(60px, 40px) scale(1.1); }
-        }
-
-        .wrapper { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 0 2rem; }
+        .wrapper { max-width: 900px; margin: auto; padding: 2rem; }
 
         nav {
-          position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+          position: fixed; width: 100%; top: 0;
+          background: rgba(10,10,15,0.8);
           border-bottom: 1px solid var(--border);
-          backdrop-filter: blur(20px);
-          background: rgba(10,10,15,0.7);
         }
+
         .nav-inner {
-          max-width: 900px; margin: 0 auto; padding: 1rem 2rem;
-          display: flex; justify-content: space-between; align-items: center;
+          max-width: 900px;
+          margin: auto;
+          padding: 1rem 2rem;
+          display: flex;
+          justify-content: space-between;
         }
-        .nav-logo {
-          font-family: 'DM Serif Display', serif;
-          font-size: 1.15rem; color: var(--text); text-decoration: none;
-        }
-        .nav-links { display: flex; gap: 2rem; list-style: none; }
-        .nav-links a {
-          color: var(--muted); text-decoration: none; font-size: 0.85rem;
-          font-family: 'DM Mono', monospace;
-        }
+
+        .nav-links { display: flex; gap: 1.5rem; list-style: none; }
 
         section { padding: 6rem 0; }
 
         h1 {
-          font-family: 'DM Serif Display', serif;
-          font-size: clamp(3rem, 8vw, 6rem);
-          margin-bottom: 1.5rem;
+          font-family: 'DM Serif Display';
+          font-size: 3rem;
         }
-        h1 em { color: var(--accent); }
 
-        .hero-sub {
-          font-size: 1.1rem; color: var(--muted); max-width: 500px;
-          margin-bottom: 2.5rem;
+        h2 {
+          font-family: 'DM Serif Display';
+          margin-bottom: 2rem;
         }
 
         .hero-stats {
-          display: flex; gap: 3rem; margin-top: 4rem;
-          padding-top: 3rem; border-top: 1px solid var(--border);
+          display: flex;
+          gap: 2rem;
+          margin-top: 2rem;
         }
 
-        .stat-num {
-          font-family: 'DM Serif Display', serif;
-          font-size: 2.2rem;
+        .project-card {
+          background: var(--surface);
+          padding: 1.5rem;
+          border-radius: 8px;
+          border: 1px solid var(--border);
+          margin-bottom: 1rem;
         }
 
-        .stat-label { font-size: 0.8rem; color: var(--muted); }
-
-        .edu-card {
-          background: var(--surface); border: 1px solid var(--border);
-          border-radius: 8px; padding: 2.5rem;
-          display: flex; justify-content: space-between; align-items: start;
+        .project-title {
+          font-family: 'DM Serif Display';
+          font-size: 1.2rem;
         }
 
-        .edu-degree {
-          font-family: 'DM Serif Display', serif;
-          font-size: 1.5rem;
+        .project-desc {
+          font-size: 0.9rem;
+          color: var(--muted);
         }
-
-        .edu-inst { color: var(--muted); }
-        .edu-year { font-family: 'DM Mono', monospace; color: var(--muted); }
 
     </style>
 </head>
 
 <body>
 
-<div class="glow-bg">
-    <span></span><span></span><span></span>
-</div>
-
 <nav>
-    <div class="nav-inner">
-        <a href="#hero" class="nav-logo">Dishanii Manna</a>
-        <ul class="nav-links">
-            <li><a href="#about">About</a></li>
-            <li><a href="#experience">Work</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#education">Education</a></li>
-        </ul>
-    </div>
+  <div class="nav-inner">
+    <div>Dishanii</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#education">Education</a></li>
+    </ul>
+  </div>
 </nav>
 
 <section id="hero">
-    <div class="wrapper">
-        <h1>Building<br/><em>intelligent</em><br/>systems.</h1>
-        <p class="hero-sub">
-            CS undergrad at KIIT with a focus on AI, machine learning, and full-stack engineering.
-        </p>
+  <div class="wrapper">
+    <h1>Building intelligent systems</h1>
 
-        <div class="hero-stats">
-            <div>
-                <div class="stat-num">3+</div>
-                <div class="stat-label">Projects</div>
-            </div>
-            <div>
-                <div class="stat-num">2027</div>
-                <div class="stat-label">Graduating</div>
-            </div>
-        </div>
+    <div class="hero-stats">
+      <div>
+        <strong>3+</strong><br/>Projects
+      </div>
+      <div>
+        <strong>2027</strong><br/>Graduating
+      </div>
     </div>
+  </div>
 </section>
 
 <section id="about">
-    <div class="wrapper">
-        <h2>About</h2>
-        <p>
-            I'm a Computer Science undergrad at KIIT, Bhubaneswar.
-            My work spans machine learning, NLP, and backend systems.
-        </p>
+  <div class="wrapper">
+    <h2>About</h2>
+    <p>
+      I'm a Computer Science undergrad at KIIT, Bhubaneswar.
+      I work on machine learning, NLP, and backend systems.
+    </p>
+  </div>
+</section>
+
+<!-- PROJECTS SECTION ADDED -->
+<section id="projects">
+  <div class="wrapper">
+    <h2>Projects</h2>
+
+    <div class="project-card">
+      <div class="project-title">RAG-Based PDF Q&A System</div>
+      <p class="project-desc">
+        Built an end-to-end retrieval augmented system using FastAPI, ChromaDB, and Ollama to answer questions from PDFs.
+      </p>
     </div>
+
+    <div class="project-card">
+      <div class="project-title">Employee Attrition Prediction</div>
+      <p class="project-desc">
+        Developed ML model using Random Forest on IBM dataset to predict attrition with high precision on imbalanced data.
+      </p>
+    </div>
+
+    <div class="project-card">
+      <div class="project-title">Retail Sales Analysis System</div>
+      <p class="project-desc">
+        Built SQL-based analytics system for sales trends, customer segmentation, and business insights.
+      </p>
+    </div>
+
+    <div class="project-card">
+      <div class="project-title">Spam Email Classifier</div>
+      <p class="project-desc">
+        NLP-based classifier using NLTK and Naive Bayes for real-time spam detection.
+      </p>
+    </div>
+
+  </div>
 </section>
 
 <section id="education">
-    <div class="wrapper">
-        <h2>Education</h2>
+  <div class="wrapper">
+    <h2>Education</h2>
 
-        <div class="edu-card">
-            <div>
-                <div class="edu-degree">B.Tech in Computer Science</div>
-                <div class="edu-inst">KIIT, Bhubaneswar</div>
-                <div class="edu-year">2023 – Present</div>
-            </div>
-        </div>
-
+    <div>
+      <strong>B.Tech CSE</strong><br/>
+      KIIT, Bhubaneswar<br/>
+      2023–Present
     </div>
+
+  </div>
 </section>
 
 </body>
